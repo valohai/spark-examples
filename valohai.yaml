@@ -2,12 +2,14 @@
 
 - step:
     name: pi-calculate
+    environment: c4.2xlarge
     image: sequenceiq/spark:1.6.0
     command:
       - spark-submit --master local[*] pi.py
 
 - step:
     name: run-example-in-jar
+    environment: c4.2xlarge
     image: sequenceiq/spark:1.6.0
     command:
       - spark-submit {parameters} $SPARK_HOME/lib/spark-examples-1.6.0-hadoop2.6.0.jar
