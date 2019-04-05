@@ -6,3 +6,29 @@
     command:
       - spark-submit --master local[*] pi.py
 
+- step:
+    name: run-example-in-jar
+    image: sequenceiq/spark:1.6.0
+    command:
+      - spark-submit {parameters} $SPARK_HOME/lib/spark-examples-1.6.0-hadoop2.6.0.jar
+    parameters:
+      - name: class
+        pass-as: --class {v}
+        type: string
+        default: org.apache.spark.examples.SparkPi
+      - name: master
+        pass-as: --master {v}
+        type: string
+        default: local[*]
+      - name: driver-memory
+        pass-as: --driver-memory {v}
+        type: string
+        default: 1g
+      - name: executor-memory
+        pass-as: --executor-memory {v}
+        type: string
+        default: 1g
+      - name: executor-cores
+        pass-as: --executor-cores {v}
+        type: integer
+        default: 1
