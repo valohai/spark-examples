@@ -1,0 +1,8 @@
+---
+
+- step:
+    name: pi-calculate
+    image: sequenceiq/spark:1.6.0
+    command:
+      - spark-submit --master local[*] pi.py
+
