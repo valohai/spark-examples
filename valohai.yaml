@@ -1,0 +1,49 @@
+- step:
+    name: debug
+    image: valohai/nimue:0.1.1
+    environment: aws-eu-west-1-t3-large
+    command:
+      - python /nimue/main.py --app-directory=/valohai/repository {parameters}
+    parameters:
+      - name: bucket
+        type: string
+      - name: release-label
+        type: string
+        default: emr-6.2.0
+      - name: cluster-applications
+        type: string
+        default: Hadoop,Hive,Spark
+      - name: master-instance-type
+        type: string
+        default: m5.xlarge
+      - name: slave-instance-type
+        type: string
+        default: m5.xlarge
+      - name: instance-count
+        type: integer
+        default: 1
+      - name: service-role
+        type: string
+        default: EMR_DefaultRole
+      - name: instance-role
+        type: string
+        default: EMR_EC2_DefaultRole
+      - name: app-main
+        type: string
+        default: debug.py
+      - name: app-requirements
+        type: string
+        default: requirements.txt
+      - name: python-versions
+        type: string
+        default: 3.6,3.7
+      - name: pa-example-argument
+        type: string
+    environment-variables:
+      - name: AWS_DEFAULT_REGION
+        description: The region to use for the AWS S3 bucket and the EMR cluster.
+        optional: false
+      - name: AWS_ACCESS_KEY_ID
+        optional: false
+      - name: AWS_SECRET_ACCESS_KEY
+        optional: false
