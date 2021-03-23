@@ -2,18 +2,7 @@
     name: run-debug-with-minimal-configuration
     image: valohai/nimue:0.1.1
     environment: aws-eu-west-1-t3-large
-    description: >-
-      Here is a minimal configuration example how to execute a Spark application with entrypoint at `debug.py`.
-      It simply prints debugging information about the runtime to the cluster logs.
-
-
-      Frequently, you don't want to configure all of the details of each Spark application execution separately.
-      To simplify the interface for your collaborators, and you future self, you can move
-      all of the more static configuration to the `command:`. You can still change these by modifying
-      the command before starting the execution.
-
-
-      For the full configuration details, see `run-debug-with-maximal-configuration` step.
+    description: Read the repository README for more information.
     command: >-
       python /nimue/main.py \
         --release-label=emr-6.2.0 \
@@ -50,12 +39,7 @@
     name: run-debug-with-maximal-configuration
     image: valohai/nimue:0.1.1
     environment: aws-eu-west-1-t3-large
-    description: >-
-      Here is a full configuration example how to execute a Spark application with entrypoint at `debug.py`.
-      It simply prints debugging information about the runtime to the cluster logs.
-
-
-      For minimal configuration example, see `run-debug-with-minimal-configuration` step.
+    description: Read the repository README for more information.
     command: python /nimue/main.py {parameters}
     parameters:
       - name: bucket
@@ -112,6 +96,7 @@
     name: run-pi
     image: valohai/nimue:0.1.1
     environment: aws-eu-west-1-t3-large
+    description: Read the repository README for more information.
     command: >-
       python /nimue/main.py \
         --release-label=emr-6.2.0 \
