@@ -1,9 +1,62 @@
 - step:
-    name: debug
+    name: run-debug-with-minimal-configuration
     image: valohai/nimue:0.1.1
     environment: aws-eu-west-1-t3-large
-    command:
-      - python /nimue/main.py --app-directory=/valohai/repository {parameters}
+    description: >-
+      Here is a minimal configuration example how to execute a Spark application with entrypoint at `debug.py`.
+      It simply prints debugging information about the runtime to the cluster logs.
+
+
+      Frequently, you don't want to configure all of the details of each Spark application execution separately.
+      To simplify the interface for your collaborators, and you future self, you can move
+      all of the more static configuration to the `command:`. You can still change these by modifying
+      the command before starting the execution.
+
+
+      For the full configuration details, see `run-debug-with-maximal-configuration` step.
+    command: >-
+      python /nimue/main.py \
+        --release-label=emr-6.2.0 \
+        --python-versions=3.7 \
+        --cluster-applications=Hadoop,Hive,Spark \
+        --master-instance-type=m5.xlarge \
+        --slave-instance-type=m5.xlarge \
+        --instance-count=1 \
+        --service-role=EMR_DefaultRole \
+        --instance-role=EMR_EC2_DefaultRole \
+        --app-directory=/valohai/repository \
+        --app-requirements=requirements.txt \
+        --app-main=debug.py \
+        {parameters}
+    parameters:
+      - name: bucket
+        type: string
+      - name: pa-example-argument
+        type: string
+        description: >-
+          Arguments that start with `-pa-` (passed argument) are forwarded to
+          the Spark application without the `-pa-` prefix.
+    environment-variables:
+      - name: AWS_DEFAULT_REGION
+        description: The region to use for the payload AWS S3 bucket and the on-demand EMR cluster.
+        optional: false
+      - name: AWS_ACCESS_KEY_ID
+        optional: false
+      - name: AWS_SECRET_ACCESS_KEY
+        optional: false
+
+
+- step:
+    name: run-debug-with-maximal-configuration
+    image: valohai/nimue:0.1.1
+    environment: aws-eu-west-1-t3-large
+    description: >-
+      Here is a full configuration example how to execute a Spark application with entrypoint at `debug.py`.
+      It simply prints debugging information about the runtime to the cluster logs.
+
+
+      For minimal configuration example, see `run-debug-with-minimal-configuration` step.
+    command: python /nimue/main.py {parameters}
     parameters:
       - name: bucket
         type: string
@@ -28,20 +81,63 @@
       - name: instance-role
         type: string
         default: EMR_EC2_DefaultRole
-      - name: app-main
+      - name: app-directory
         type: string
-        default: debug.py
+        default: /valohai/repository
       - name: app-requirements
         type: string
         default: requirements.txt
+      - name: app-main
+        type: string
+        default: debug.py
       - name: python-versions
         type: string
         default: 3.6,3.7
       - name: pa-example-argument
         type: string
+        description: >-
+          Arguments that start with `-pa-` (passed argument) are forwarded to
+          the Spark application without the `-pa-` prefix.
     environment-variables:
       - name: AWS_DEFAULT_REGION
-        description: The region to use for the AWS S3 bucket and the EMR cluster.
+        description: The region to use for the payload AWS S3 bucket and the on-demand EMR cluster.
+        optional: false
+      - name: AWS_ACCESS_KEY_ID
+        optional: false
+      - name: AWS_SECRET_ACCESS_KEY
+        optional: false
+
+
+- step:
+    name: run-pi
+    image: valohai/nimue:0.1.1
+    environment: aws-eu-west-1-t3-large
+    command: >-
+      python /nimue/main.py \
+        --release-label=emr-6.2.0 \
+        --python-versions=3.7 \
+        --cluster-applications=Hadoop,Hive,Spark \
+        --master-instance-type=m5.xlarge \
+        --slave-instance-type=m5.xlarge \
+        --instance-count=1 \
+        --service-role=EMR_DefaultRole \
+        --instance-role=EMR_EC2_DefaultRole \
+        --app-directory=/valohai/repository \
+        --app-requirements=requirements.txt \
+        --app-main=pi.py \
+        {parameters}
+    parameters:
+      - name: bucket
+        type: string
+      - name: pa-parallelism
+        type: integer
+        default: 2
+      - name: pa-output
+        type: string
+        description: Where to `DataFrame.write` the output e.g. AWS S3 like s3://my-bucket/path/to/pi-results
+    environment-variables:
+      - name: AWS_DEFAULT_REGION
+        description: The region to use for the payload AWS S3 bucket and the on-demand EMR cluster.
         optional: false
       - name: AWS_ACCESS_KEY_ID
         optional: false
