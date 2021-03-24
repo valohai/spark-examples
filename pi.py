@@ -1,13 +1,37 @@
-# Original: https://stackoverflow.com/questions/26828987/why-is-this-simple-spark-program-not-utlizing-multiple-cores
-import random
-from pyspark import SparkContext
+import argparse
+from operator import add
+from random import random
 
-NUM_SAMPLES = 12500000
+from pyspark.sql import SparkSession
 
-def sample(p):
-    x, y = random.random(), random.random()
-    return 1 if x*x + y*y < 1 else 0
 
-sc = SparkContext("local[*]", "Pi App")
-count = sc.parallelize(xrange(0, NUM_SAMPLES)).map(sample).reduce(lambda a, b: a + b)
-print("Pi is roughly %f" % (4.0 * count / NUM_SAMPLES))
+def calculate_pi(parallelism, output):
+    # Original: https://github.com/apache/spark/blob/master/examples/src/main/python/pi.py
+
+    def f(_):
+        x = random() * 2 - 1
+        y = random() * 2 - 1
+        return 1 if x ** 2 + y ** 2 <= 1 else 0
+
+    with SparkSession.builder.appName('PythonPi').getOrCreate() as spark:
+        n = 100000 * parallelism
+        count = spark.sparkContext.parallelize(range(n), parallelism) \
+            .map(f) \
+            .reduce(add)
+        pi = 4.0 * count / n
+        print(f'Pi is about {pi}')
+        if output is not None:
+            print(f'Saving data frame to "{output}"...')
+            df = spark.createDataFrame([(n, count, pi)], ['n', 'count', 'pi'])
+            df.write.mode('overwrite').json(output)
+            print('Saved!')
+        else:
+            print('No "--output" specified, skip saving data frame.')
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--parallelism', default=2, type=int)
+    parser.add_argument('--output')
+    args = parser.parse_args()
+    calculate_pi(args.parallelism, args.output)
