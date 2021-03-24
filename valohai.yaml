@@ -1,6 +1,6 @@
 - step:
     name: run-debug-with-minimal-configuration
-    image: valohai/nimue:0.1.1
+    image: valohai/nimue:0.1.2
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: >-
@@ -18,7 +18,7 @@
         --app-main=debug.py \
         {parameters}
     parameters:
-      - name: bucket
+      - name: payload-bucket
         type: string
       - name: pa-example-argument
         type: string
@@ -37,12 +37,12 @@
 
 - step:
     name: run-debug-with-maximal-configuration
-    image: valohai/nimue:0.1.1
+    image: valohai/nimue:0.1.2
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: python /nimue/main.py {parameters}
     parameters:
-      - name: bucket
+      - name: payload-bucket
         type: string
       - name: release-label
         type: string
@@ -94,7 +94,7 @@
 
 - step:
     name: run-pi
-    image: valohai/nimue:0.1.1
+    image: valohai/nimue:0.1.2
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: >-
@@ -112,7 +112,7 @@
         --app-main=pi.py \
         {parameters}
     parameters:
-      - name: bucket
+      - name: payload-bucket
         type: string
       - name: pa-parallelism
         type: integer
