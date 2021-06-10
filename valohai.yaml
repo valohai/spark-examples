@@ -1,6 +1,6 @@
 - step:
     name: run-debug-with-minimal-configuration
-    image: valohai/nimue:0.1.2
+    image: valohai/nimue:0.2.0
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: >-
@@ -11,6 +11,7 @@
         --master-instance-type=m5.xlarge \
         --slave-instance-type=m5.xlarge \
         --instance-count=1 \
+        --tags=billingClass=ml,company:division=research \
         --service-role=EMR_DefaultRole \
         --instance-role=EMR_EC2_DefaultRole \
         --app-directory=/valohai/repository \
@@ -37,7 +38,7 @@
 
 - step:
     name: run-debug-with-maximal-configuration
-    image: valohai/nimue:0.1.2
+    image: valohai/nimue:0.2.0
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: python /nimue/main.py {parameters}
@@ -93,8 +94,51 @@
 
 
 - step:
+    name: run-debug-with-aws-emr-configurations-json
+    image: valohai/nimue:0.2.0
+    environment: aws-eu-west-1-t3-large
+    description: Read the repository README for more information.
+    command: >-
+      python /nimue/main.py \
+        --release-label=emr-6.2.0 \
+        --python-versions=3.7 \
+        --cluster-applications=Hadoop,Hive,Spark \
+        --master-instance-type=m5.xlarge \
+        --slave-instance-type=m5.xlarge \
+        --instance-count=1 \
+        --configurations=file://valohai/inputs/configurations/configurations.json \
+        --tags=billingClass=ml,company:division=research \
+        --service-role=EMR_DefaultRole \
+        --instance-role=EMR_EC2_DefaultRole \
+        --app-directory=/valohai/repository \
+        --app-requirements=requirements.txt \
+        --app-main=debug.py \
+        {parameters}
+    parameters:
+      - name: payload-bucket
+        type: string
+      - name: pa-example-argument
+        type: string
+        description: >-
+          Arguments that start with `-pa-` (passed argument) are forwarded to
+          the Spark application without the `-pa-` prefix.
+    inputs:
+      - name: configurations
+        filename: configurations.json
+        description: AWS EMR Configurations JSON file for the cluster.
+    environment-variables:
+      - name: AWS_DEFAULT_REGION
+        description: The region to use for the payload AWS S3 bucket and the on-demand EMR cluster.
+        optional: false
+      - name: AWS_ACCESS_KEY_ID
+        optional: false
+      - name: AWS_SECRET_ACCESS_KEY
+        optional: false
+
+
+- step:
     name: run-pi
-    image: valohai/nimue:0.1.2
+    image: valohai/nimue:0.2.0
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: >-

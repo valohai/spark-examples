@@ -122,52 +122,51 @@ for packaging and executing Spark applications on on-demand clusters.
 Here are the descriptions of all available command-line arguments:
 
 ```
---payload-bucket PAYLOAD_BUCKET (str, required) 
-                    AWS S3 bucket name to store the application 
-                    payload and logs e.g. valohai-emr-my-company
---app-directory APP_DIRECTORY (str, required)
-                    The root directory that has your
-                    application, e.g. /valohai/repository
---app-main APP_MAIN   (str, required) 
-                    The Python script relative to
-                    "app_directory" e.g. spark/extract.py
---app-requirements APP_REQUIREMENTS (str, required)
-                    The requirements-file relative to
-                    "app_directory" for dependencies e.g. requirements.txt
---service-role SERVICE_ROLE (str, required)
-                    Service role to pass to AWS EMR e.g. EMR_DefaultRole
---instance-role INSTANCE_ROLE (str, required)
-                    Instance role to pass to AWS EMR e.g. EMR_EC2_DefaultRole
---release-label RELEASE_LABEL (str, required)
-                    The AWS EMR release label for big data
-                    software versions e.g. emr-6.2.0
---cluster-applications [CLUSTER_APPLICATIONS [CLUSTER_APPLICATIONS ...]]
-                    (List[str], required) Comma-separated list of software
-                    to preinstall e.g. Hadoop,Hive,Spark
---master-instance-type MASTER_INSTANCE_TYPE (str, required)
-                    AWS instance type for the master node e.g. m5.xlarge
---master-security-group MASTER_SECURITY_GROUP (str, default=)
-                    Optional AWS security group ID for the master node e.g. sg-12312313123123123
---slave-instance-type SLAVE_INSTANCE_TYPE (str, required)
-                    AWS instance type for the slave nodes e.g. m5.xlarge
---slave-security-group SLAVE_SECURITY_GROUP (str, default=)
-                    Optional AWS security group ID for the
-                    slave nodes e.g. sg-12312313123123123
---instance-count INSTANCE_COUNT (int, required)
-                    How many total instances to launch in
-                    the cluster e.g. 4 means 1 master 3 slaves
---subnet-id SUBNET_ID (str, default=)
-                    Optional AWS subnet ID for the nodes
-                    e.g. subnet-12341234
---idle-timeout IDLE_TIMEOUT (int, default=1200)
-                    Optional minutes do we allow the
-                    cluster to be idle before shutdown
---kill-timeout KILL_TIMEOUT (int, default=86400)
-                    Optional minutes do we wait for
-                    the workload to finish before shutdown
---python-versions [PYTHON_VERSIONS [PYTHON_VERSIONS ...]]
-                    (List[str], required) Comma-separated list of Python
-                    version to expect on the cluster e.g. 3.6,3.7
+  --payload-bucket PAYLOAD_BUCKET
+      (str, required) AWS S3 bucket name to store the application payload and logs 
+      e.g. valohai-emr-my-company
+  --app-directory APP_DIRECTORY
+      (str, required) The root directory that has your application, e.g. /valohai/repository
+  --app-main APP_MAIN   
+      (str, required) The Python script relative to "app_directory" e.g. spark/extract.py
+  --app-requirements APP_REQUIREMENTS
+      (str, required) The requirements-file relative to "app_directory" for dependencies 
+      e.g. requirements.txt
+  --service-role SERVICE_ROLE
+      (str, required) Service role to pass to AWS EMR e.g. EMR_DefaultRole
+  --instance-role INSTANCE_ROLE
+      (str, required) Instance role to pass to AWS EMR e.g. EMR_EC2_DefaultRole
+  --release-label RELEASE_LABEL
+      (str, required) The AWS EMR release label for big data software versions e.g. emr-6.2.0
+  --cluster-applications [CLUSTER_APPLICATIONS [CLUSTER_APPLICATIONS ...]]
+      (List[str], required) Comma-separated list of software to preinstall e.g. Hadoop,Hive,Spark
+  --configurations CONFIGURATIONS
+      (str, default=) Path to the AWS EMR "configurations" JSON file, supports wildcards 
+      with * and will use the first matching file e.g. file://path/to/conf.json 
+      or file://my/configurations/*.json
+  --master-instance-type MASTER_INSTANCE_TYPE
+      (str, required) AWS instance type for the master node e.g. m5.xlarge
+  --master-security-group MASTER_SECURITY_GROUP
+      (str, default=) Optional AWS security group ID for the master node e.g. sg-12312313123123123
+  --slave-instance-type SLAVE_INSTANCE_TYPE
+      (str, required) AWS instance type for the slave nodes e.g. m5.xlarge
+  --slave-security-group SLAVE_SECURITY_GROUP
+      (str, default=) Optional AWS security group ID for the slave nodes e.g. sg-12312313123123123
+  --instance-count INSTANCE_COUNT
+      (int, required) How many total instances to launch in the cluster 
+      e.g. 4 means 1 master 3 slaves
+  --subnet-id SUBNET_ID
+      (str, default=) Optional AWS subnet ID for the nodes e.g. subnet-12341234
+  --idle-timeout IDLE_TIMEOUT
+      (int, default=1200) Optional minutes do we allow the cluster to be idle before shutdown
+  --kill-timeout KILL_TIMEOUT
+      (int, default=86400) Optional minutes do we wait for the workload to finish before shutdown
+  --tags TAGS           
+      (List[Tuple[str, str]], default=[]) Optional comma-separated tags to assign
+      e.g. name=circular,company:div=my office
+  --python-versions [PYTHON_VERSIONS [PYTHON_VERSIONS ...]]
+      (List[str], required) Comma-separated list of Python version to expect on the cluster 
+      e.g. 3.6,3.7
 ```
 
 To pass arguments to your own Spark application, you have two options:
