@@ -1,6 +1,6 @@
 - step:
     name: run-debug-with-minimal-configuration
-    image: valohai/nimue:0.2.0
+    image: valohai/nimue:0.3.1
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: >-
@@ -38,7 +38,7 @@
 
 - step:
     name: run-debug-with-maximal-configuration
-    image: valohai/nimue:0.2.0
+    image: valohai/nimue:0.3.1
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: python /nimue/main.py {parameters}
@@ -95,7 +95,7 @@
 
 - step:
     name: run-debug-with-aws-emr-configurations-json
-    image: valohai/nimue:0.2.0
+    image: valohai/nimue:0.3.1
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: >-
@@ -138,7 +138,7 @@
 
 - step:
     name: run-pi
-    image: valohai/nimue:0.2.0
+    image: valohai/nimue:0.3.1
     environment: aws-eu-west-1-t3-large
     description: Read the repository README for more information.
     command: >-
